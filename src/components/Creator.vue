@@ -69,28 +69,8 @@ export default {
       }
   },
   mounted(){
-      this.participants= [
-          "one",
-          "two",
-          "three",
-          "four",
-          "five",
-          "six",
-          "seven",
-          "height",
-          "nine"
-      ];
-      this.participantsCopy= [
-          "one",
-          "two",
-          "three",
-          "four",
-          "five",
-          "six",
-          "seven",
-          "height",
-          "nine"
-      ];
+      this.participants= [];
+      this.participantsCopy= [];
       this.group_lists=[];
   },
   methods: {
