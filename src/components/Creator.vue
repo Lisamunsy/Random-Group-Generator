@@ -30,7 +30,7 @@
                         <button v-on:click="goGroup($event, participants, groups_number)"> Generate</button>
                     </div>
                 </div>
-                <div class="results">
+                <div  class="results">
                     <article>
                        
                         <div class="group-lists" v-for="gl in group_lists" :key="'gl'+gl[0]"> 
@@ -54,6 +54,7 @@ export default {
     msg: String
   },
   data(){
+      
       return{
           participants: [],
           challa: "",
@@ -86,7 +87,7 @@ export default {
      },
      allReset(e){
          e.preventDefault();
-         this.participants = this.participantsCopy;
+         this.participants = [];
          this.group_lists= []
      },
      goGroup(e, noms, num){
