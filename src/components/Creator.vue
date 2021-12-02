@@ -15,8 +15,8 @@
                         <h3>Liste des participants</h3>
                         <ul>
                             <li v-for="element in participants" :key="'el-'+element">
-                                {{element}}
-                                
+                                <div>{{element}}</div>
+                                <div><a href="#"><font-awesome-icon :icon="fa-times"/></a></div>
                             </li>
                         </ul>
                     
@@ -30,7 +30,7 @@
                         <button v-on:click="goGroup($event, participants, groups_number)"> Generate</button>
                     </div>
                 </div>
-                <div  class="results">
+                <div  class="results" v-show="isNinja">
                     <article>
                        
                         <div class="group-lists" v-for="gl in group_lists" :key="'gl'+gl[0]"> 
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'Creator',
   props: {
@@ -58,15 +59,15 @@ export default {
       return{
           participants: [],
           challa: "",
-          groups_number: 0,
+          groups_number: 2,
           group_lists: [
               {
                 name:"",
               membres: []   
               }
-          ]
+          ],
           
-          
+         isNinja:false 
       }
   },
   mounted(){
@@ -88,49 +89,56 @@ export default {
      allReset(e){
          e.preventDefault();
          this.participants = [];
-         this.group_lists= []
+         this.group_lists= [];
+         this.isNinja =false;
      },
      goGroup(e, noms, num){
          e.preventDefault();
-        let lefties= (noms.length)%(num);
-        let fullies=(noms.length - lefties)/(num)
-       
-        for (let i=0; i<num;i++){
-        let newGroupe= ["groupe n°"+(i+1), []]
-        this.group_lists.push(newGroupe)
-        console.log(this.group_lists);
-        }
-
-
-        for (let g = 0; g <= num; g++) {
-            var element = [];
-            if(noms.length>= noms.length-(fullies*g)){
-                element = [];
-                for (let j = 0; j < fullies; j++) {
-                    const rand = Math.floor(Math.random() * noms.length);
-                    element.push(noms[rand])
-                    noms.splice(rand,1);
-                }
-                this.group_lists[g].membres = element
+         if (num!=0) {
+             
+             this.isNinja =true;
+            let lefties= (noms.length)%(num);
+            let fullies=(noms.length - lefties)/(num)
+        
+            for (let i=0; i<num;i++){
+                let newGroupe= ["groupe n°"+(i+1), []]
+            this.group_lists.push(newGroupe)
+            console.log(this.group_lists);
             }
 
-            if(noms.length<fullies){
-                
-                for (let j = 0; j < num; j++) {
-                    const rand = Math.floor(Math.random() * noms.length);
-                    this.group_lists[j].membres.push(noms[rand])
-                    noms.splice(rand,1);
+
+            for (let g = 0; g <= num; g++) {
+                var element = [];
+                if(noms.length>= noms.length-(fullies*g)){
+                    element = [];
+                    for (let j = 0; j < fullies; j++) {
+                        const rand = Math.floor(Math.random() * noms.length);
+                        element.push(noms[rand])
+                        noms.splice(rand,1);
+                    }
+                    this.group_lists[g].membres = element
                 }
-            }   
-        }         
+
+                if(noms.length<fullies){
+                    
+                    for (let j = 0; j < num; j++) {
+                        const rand = Math.floor(Math.random() * noms.length);
+                        this.group_lists[j].membres.push(noms[rand])
+                        noms.splice(rand,1);
+                    }
+                }   
+            }         
+        }
     } 
   }
 }
 </script>
 
 <style >
+
     .container{
         height: 100%;
+        
     }   
     .content{
         height: 100%;
@@ -139,27 +147,32 @@ export default {
     h1{
         font-size: 4rem;
         color: whitesmoke;
-        margin: 2rem;
+        margin:1.5rem 2rem;
     }
     main{
+        width: 100vw;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-evenly;
-        height:80%;
+        height:auto;
     }
     .creator, .results{
-        background: rgba(252, 252, 255, 0.363);
+        background: rgba(252, 252, 255, 0.45);
         padding: 1rem ;
-        width: 47%;
-        height:100%;
-        margin:0 auto;
+        
+        width: 800px;
+        max-width: 95%;
+        height:auto;
+        margin:1rem auto;
         border-radius: 1rem ;
     }
     .ajout-form{
-        width: 85%;
+        width: 90%;
         margin: 0 auto;
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
+        align-items: center;
     }
     main input{
         padding: 0.75rem;
@@ -168,30 +181,41 @@ export default {
         border-radius: 1rem; 
     }
     .ajout-form input{
-        width: 80%;
+        width: 600px;
+        max-width: 90%;
+    }
+    .ajout-form button{
+
+        margin: 0 auto;
     }
     .creator button{
         padding: 0.5rem;
         border-radius: 1rem;
         border: none;
-        background: rgb(83, 61, 126);
+        background: rgb(107, 49, 224);
         color: white;
+        letter-spacing: 1px;
     }
     .list{
         width: 85%;
-        height: 80%;
+        height: auto;
         margin: 1rem  auto;
         
         
     }
     .list ul{
-        background: rgba(255, 255, 255, 0.836);
         list-style: none;
         height: 80%;
         padding: 1rem;
         margin: 1rem 0;
-         border-radius: 1rem;
-         overflow:auto;
+        overflow:auto;
+    }
+    .list li{
+        border-radius: 1rem;
+        margin: 00.45rem;
+        padding: 0.5rem;
+        background: rgba(255, 255, 255, 0.836);
+
     }
     .list h3{
         background: rgb(83, 61, 126);
@@ -206,11 +230,10 @@ export default {
         font-size: 1.25rem;
         padding: 0.75rem;
         margin-left: 1rem;
+        margin-top: 1rem;
     }
 
-    .results{
-        width: 45%;
-    }
+    
     article{
         padding: 1rem;
         height: 100%;
@@ -230,6 +253,12 @@ export default {
         padding: 0.5rem 0;
     }
     .group-lists ul{
+        padding: 0.5rem;
+    }
+    font-awesome-icon{
+        height: 1rem;
+        width: auto;
+        color: red;
         padding: 0.5rem;
     }
 
