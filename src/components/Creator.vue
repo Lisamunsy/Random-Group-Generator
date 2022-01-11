@@ -15,8 +15,8 @@
                         <h3>Liste des participants</h3>
                         <ul>
                             <li v-for="element in participants" :key="'el-'+element">
-                                <div>{{element}}</div>
-                                <div><a href="#"><font-awesome-icon :icon="fa-times"/></a></div>
+                                <div class="particip">{{element}} <a href="#" v-on:click="deleteOne($event, element)"><font-awesome-icon :icon="['fas', 'times']" /></a></div>
+                                
                             </li>
                         </ul>
                     
@@ -27,7 +27,7 @@
                     <div class="generator">
                         <label for="groups"> Nombre de groupes : </label> 
                         <input type="number" min="2" placeholder="2" v-model="groups_number" id='groups'>
-                        <button v-on:click="goGroup($event, participants, groups_number)"> Generate</button>
+                        <button v-on:click="goGroup($event, participantsCopy, groups_number)"> Generate</button>
                     </div>
                 </div>
                 <div  class="results" v-show="isNinja">
@@ -48,7 +48,10 @@
 </template>
 
 <script>
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
+library.add(faTimes)
 export default {
   name: 'Creator',
   props: {
@@ -58,6 +61,7 @@ export default {
       
       return{
           participants: [],
+          participantsCopy: [],
           challa: "",
           groups_number: 2,
           group_lists: [
@@ -92,9 +96,15 @@ export default {
          this.group_lists= [];
          this.isNinja =false;
      },
+     deleteOne(e, elem){
+         e.preventDefault();
+        let $place= this.participants.indexOf(elem);
+        this.participants.splice($place, 1);
+
+     },
      goGroup(e, noms, num){
          e.preventDefault();
-         if (num!=0) {
+         if (num!=0 & noms.length>=2) {
              
              this.isNinja =true;
             let lefties= (noms.length)%(num);
@@ -127,7 +137,8 @@ export default {
                         noms.splice(rand,1);
                     }
                 }   
-            }         
+            }   
+               
         }
     } 
   }
@@ -158,14 +169,14 @@ export default {
     }
     .creator, .results{
         background: rgba(252, 252, 255, 0.45);
-        padding: 1rem ;
-        
+        padding: 1rem 0;
         width: 800px;
         max-width: 95%;
         height:auto;
         margin:1rem auto;
         border-radius: 1rem ;
     }
+    
     .ajout-form{
         width: 90%;
         margin: 0 auto;
@@ -197,21 +208,19 @@ export default {
         letter-spacing: 1px;
     }
     .list{
-        width: 85%;
+        width: 100%;
         height: auto;
         margin: 1rem  auto;
-        
-        
     }
     .list ul{
         list-style: none;
         height: 80%;
         padding: 1rem;
-        margin: 1rem 0;
+        margin: 0;
         overflow:auto;
     }
     .list li{
-        border-radius: 1rem;
+        /* border-radius: 0.25rem; */
         margin: 00.45rem;
         padding: 0.5rem;
         background: rgba(255, 255, 255, 0.836);
@@ -221,7 +230,7 @@ export default {
         background: rgb(83, 61, 126);
         color: whitesmoke;
         padding: 0.5rem 0;
-        border-radius: 1rem;
+        /* border-radius: 1rem; */
     }
    .generator{
        color: white;
@@ -255,10 +264,10 @@ export default {
     .group-lists ul{
         padding: 0.5rem;
     }
-    font-awesome-icon{
+    .particip a{
         height: 1rem;
         width: auto;
-        color: red;
+        color: darkred;
         padding: 0.5rem;
     }
 
